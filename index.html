@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"></meta>
+		<meta name="author" content="John Baumann"></meta>
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0 user-scalable=no"></meta>
+
+		<link href="./css/stylesheet.css" rel="stylesheet"></link>
+		<link rel="stylesheet" href="css/debug.css">
+		<script src="./js/jquery-2.1.4.min.js"></script>
+		<script src="./js/parse.min.js"></script>
+
+
+		<script src="./js/main.js"/></script>
+		<script src="./js/D1_debug.js"/></script>
+		<script src="./js/venueList.js"/></script>
+		<script src="./js/poker-hand.min.js"/></script>
+		<script src="./js/snap.svg-min.js"/></script>
+		<script src="./js/svg_cards.js"/></script>
+		<script src="./js/pstart.js"/></script>
+		<script src="./js/default.js"/></script>
+		<script src="./js/crawl.js"/></script>
+
+
+    </head>
+	<body>
+		<!-- debug -->
+		<button id="debug_button" onClick="DebugToggle(this)" >DBUG</button>
+		<div id="allresult"  onClick="DebugToggle(this)">
+			<button id='reset_button' onclick=resetState() resetTour()>RESET</button>
+			<button id='score_button' onclick=setupLeaderBoard()>SCORE</button>
+			<div id="gameDB"></div>
+			<div id="infoDB"></div>
+		</div>
+
+		<button id="event_button" >BEACON</button>
+
+		<div id="introPage"   class="flex-container appPage">
+			<div class="header">
+			</div>
+			<div class="introGraphic"></div>
+			<div class="introText">
+
+				<p> Join the poker run!</p>
+			</div>
+			<div class="footer">
+				<div class="button" onclick=startAdventure()>JOIN</div>
+			</div>
+
+		</div>
+
+
+		<div id="mainPage" style="display: none;" class="flex-container appPage">
+			<div class="header">
+			</div>
+			<div id="cardDisplay"><svg id="cardSVG"></svg></div>
+			<div id="cardList" >
+			no cards</div>
+			<div class="footer">
+				<div class="button"  onclick="setupCrawlPage();">crawl </div>
+				<div class="button"  id="scoreButton" style="display: none;" onclick="setupLeaderBoard();">scores</div>
+			</div>
+		</div>
+
+		<div id="crawlPage" style="display: none;" class="flex-container appPage">
+			<div class="header">
+			</div>
+			<div id="crawlVenues"></div>
+			<div id="crawlTime"></div>
+			<div id="info" >
+			crawl info</div>
+			<div class="footer">
+				<div class="button"  onclick="setupMainPage();">hand </div>
+			</div>
+		</div>
+
+		<div id="leaderboardPage" style="display: none;" class="flex-container appPage">
+			<div class="header">
+			</div>
+			<div id="scores" ></div>
+			<div class="footer">
+				<div class="button"  onclick="setupMainPage();">hand </div>
+				</div>
+		</div>
+
+		<div id="detailsPage" style="display: none;" class="flex-container appPage">
+			<div id="detailLogo" ><img></div>
+			<div id="detailName" >Name</div>
+			<div id="detailInfo" >
+			</div>
+			<div class="footer"  >
+				<button name="map-button" class="button"  >directions</button>
+
+				<div class="button" onclick=backToMain()>back</div>
+			</div>
+		</div>
+
+		<div id="welcomeAlert" style="display: none;" class="flex-container appPage">
+			<div id="welcomeLogo"><img></div>
+			<div id="welcomeInfo" >Welcome Info</div>
+			<div class="footer">
+				<div class="button" onclick=backToMain()>back</div>
+			</div>
+	</div>
+
+
+	</body>
+</html>
