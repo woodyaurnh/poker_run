@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
 var BRANCH = "master";
-var VERSION = "0.0.24";
+var VERSION = "0.0.25";
 
 var MIN_CARD_DELAY = 2;
 var MAX_CARD_DELAY = 5;
