@@ -1,14 +1,13 @@
 /* jshint esversion: 6 */
 
 var BRANCH = "master";
-var VERSION = "0.0.22";
+var VERSION = "0.0.24";
 
-var MIN_CARD_DELAY = 10;
-var MAX_CARD_DELAY = 20;
+var MIN_CARD_DELAY = 2;
+var MAX_CARD_DELAY = 5;
 
 var p;
 var dealing = false;
-
 
 var nextmajors = [];
 var nextPlaceMajors = nextPlaceMajors();
@@ -127,7 +126,6 @@ function currentPlaceStateUpdated() {
       currentState.nextMIndex++;
       addCard();
       if(currentState.nextMIndex === 5){
-        //scoreHand(5000);
         $("#mainPage .footer .button").show();
       }
 
@@ -154,6 +152,7 @@ function startAdventure() {
   currentGameState.pName = pName;
   currentGameState.hand = [];
   currentGameState.nextMIndex = 0;
+  currentGameState.wasScored = false;
   gameState.set(currentGameState);
   setupCrawlPage();
   gotoPage('#crawlPage');
@@ -263,6 +262,14 @@ function setupCrawlPage() {
       $("#crawlPage #info").html("<p>Congrats, you finished the run! Wait for the end to see the who won</p>");
 
     }
+    if (timeToCrawlEnd() <= 0){
+      $("#crawlPage #info").append("<p>crawl will end at " + XendDate.toString());
+
+    }else {
+      $("#crawlPage #info").append("<p>Crawl is over");
+
+    }
+
   }
   gotoPage('#crawlPage');
 
@@ -383,8 +390,8 @@ function pokerCard(rank,suit,x,y,r,s){
     var l1a = p.path(path_1);
     var l0a = p.path(path_0);
     rank2 = p.group(l1a,l0a);
-    rank1.transform('t20,90s.4,.4');
-    rank2.transform('t115,220s-.4,-.4');
+    rank1.transform('T20,90s.4,.4');
+    rank2.transform('T115,220s-.4,-.4');
   }else {
     eval("var rank1 = p.path(path_" + rank + ")");
     console.log("rank");
@@ -521,6 +528,10 @@ function uniqueRandomCard() {
   present('notification', notfSettings );
   DBinfo(["uniqueRandomCard: calling setupMainPage"]);
   dealing = false;
+  if(hand.length == 5){
+    DBinfo(["hand length 5"]);
+    scoreHand(5000);
+  }
   setupMainPage();
 
 }
@@ -580,8 +591,9 @@ function getCard(){
       present('notification', notfSettings );
       DBinfo(["getCard: calling setupMainPage"]);
       setupMainPage();
-      if(venueIndex >= (crawl.locs).length){
-        DBinfo(["calling scoreHand - with delay"]);
+      DBinfo(["about to check for venueIndex"])
+      if(venueIndex == (crawl.locs).length - 1){
+        DBinfo(["venueIndex- "+ venueIndex + " calling scoreHand - with delay"]);
         scoreHand(5000);
       }
 
@@ -613,7 +625,9 @@ function addPlayer(name) {
 }
 
 function scoreHand(delay) {
-  window.setTimeout(function(){
+  let curState = gameState.get();
+  if (!(curState.wasScored))
+  {window.setTimeout(function(){
     DBinfo(["in scoreHand"]);
     var currentState = gameState.get();
     var hand = currentState.hand;
@@ -633,6 +647,10 @@ function scoreHand(delay) {
             DBinfo(["Saved score: to DB - ", scoredHand.name, " ",scoredHand.value]);
             // Execute any logic that should take place after the object is saved.
             //alert('New object created with objectId: ' + pokerRun.id);
+            curState.wasScored = true;
+            gameState.set(curState);
+            //$('#mainPage #scoreButton').show();
+
           },
           error: function(pokerRun, error) {
             // Execute any logic that should take place if the save fails.
@@ -647,7 +665,7 @@ function scoreHand(delay) {
         // error is a Parse.Error with an error code and message.
       }
     });
-  },delay);
+  },delay);}
 }
 
 function getScores(){

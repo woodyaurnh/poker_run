@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-var start = new Date (2017,9,26,14,15);
+var start = new Date (2017,9,30,22,28);
 DBinfo(["start time: ",start.toString()]);
 
 var crawl = {
@@ -8,7 +8,7 @@ var crawl = {
   // start date and time
   start: start,
   // duration in hours
-  dur: 0.4,
+  dur: 0.15,
   locs: [
     {name: "dubliner", major: "104"},
     {name: "bavaria", major: "106"},
@@ -20,10 +20,24 @@ var crawl = {
   ]
 };
 
+
+var XcrawlEnd = (crawl.start).getTime() + (crawl.dur * (1000 * 60 * 60));
+var XendDate = new Date(XcrawlEnd);
+
+
+
 function timeToCrawlStart() {
   let now = new Date();
   let msLeft = crawl.start - now;
   return msLeft;
+}
+
+function timeToCrawlEnd() {
+  let now = new Date();
+  let crawlEnd = (crawl.start).getTime() + (crawl.dur * (1000 * 60 * 60));
+  let endDate = new Date(crawlEnd);
+  let mstoEnd = now - endDate;
+  return mstoEnd;
 }
 
 
@@ -76,11 +90,13 @@ function setupCrawlEnd(crawlName){
       showInApp: false };
   var callback = function(){
     console.log("callback: " + crawl.name + " " + notfText);
+    DBinfo(["setupCrawlEnd(): Crawl is ENDING NOW "]);
+    $('#mainPage #scoreButton').show();
+
     present('notification', notfSettings );
     // add leaderboard button to crawl page
     // turn on leaderboard
     setupLeaderBoard(1000);
-    $('#mainPage #scoreButton').show();
   };
   if(msLeft>2000){
     console.log("starting timer");

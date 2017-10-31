@@ -161,6 +161,8 @@ body {
 }
 
 #info {
+  text-align: center;
+  width: 80%;
   margin: 8px;
 }
 
