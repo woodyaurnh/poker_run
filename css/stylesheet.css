@@ -76,6 +76,10 @@ body {
   margin: auto;
 }
 
+#scoreButton {
+  margin-top: 20px;
+}
+
 #leaderboardPage  #scores {
   position: relative;
   width: 100%;
@@ -101,7 +105,7 @@ body {
 
 
 .footer {
-  height: 5vh;
+  /*height: 5vh; */
   margin: 10px;
   width: 100%;
   display: block;

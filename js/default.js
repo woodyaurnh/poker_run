@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
 var BRANCH = "master";
-var VERSION = "0.0.25";
+var VERSION = "0.0.31";
 
 var MIN_CARD_DELAY = 2;
 var MAX_CARD_DELAY = 5;
@@ -115,8 +115,11 @@ function currentPlaceStateUpdated() {
   } else {
     curMajor = currentPlace.major;
     currentState.curMajor = curMajor;
-    DBinfo(["curMajor is: ",curMajor]);
-    setPlayerMajor(curMajor);
+    gameState.set(currentState);
+  DBinfo(["curMajor is: ",curMajor]);
+    if(curMajor !== "") {
+      setPlayerMajor(curMajor);
+    }
 
     if(curMajor === crawl.locs[currentState.nextMIndex].major){
       // do welcome, deal card etc
@@ -125,9 +128,6 @@ function currentPlaceStateUpdated() {
       currentState.page = "#welcomeAlert";
       currentState.nextMIndex++;
       addCard();
-      if(currentState.nextMIndex === 5){
-        $("#mainPage .footer .button").show();
-      }
 
     }
 
@@ -142,10 +142,15 @@ function currentPlaceStateUpdated() {
 function startAdventure() {
   let pState = playerState.get();
   let pName = pState.playerDisplayName;
+  let email = pState.email;
   DBinfo(["playerDisplayName: ",pName]);
   if(typeof(pName) === "undefined"){
     let suffix = getRandomInt(1,100);
     pName = "player_" + suffix;
+  }
+  if(pName === ""){
+    DBinfo(["player name is BLANK, using EMAIL"]);
+    pName = email;
   }
   let currentGameState = gameState.get();
   currentGameState.appState = "joined";
@@ -163,6 +168,9 @@ function startAdventure() {
 
 function playerStateUpdated() {
   DBinfo(["playerStateUpdated()"]);
+  var currentPlayer = playerState.get();
+  $('#playerDB').html(ShowProps(currentPlayer));
+
 }
 
 function crawlVenueDisplay(index) {
@@ -263,10 +271,10 @@ function setupCrawlPage() {
 
     }
     if (timeToCrawlEnd() <= 0){
-      $("#crawlPage #info").append("<p>crawl will end at " + XendDate.toString());
+      $("#crawlPage #info").append("<p>crawl will end at " + XendDate.toString() + "</p>");
 
     }else {
-      $("#crawlPage #info").append("<p>Crawl is over");
+      $("#crawlPage #info").html("<p>CRAWL IS OVER</p>");
 
     }
 
@@ -693,7 +701,7 @@ function getScores(){
 function setPlayerMajor(major){
   var curState = gameState.get();
   if(curState.hasOwnProperty("pID")){
-    DBinfo(["setPlayerMjor: pID --", curState.pID]);
+    DBinfo(["setPlayerMajor: pID --", curState.pID]);
     var prun = Parse.Object.extend("PokerRun");
     var query = new Parse.Query(prun);
     query.get(curState.pID, {

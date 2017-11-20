@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-var start = new Date (2017,9,30,22,28);
+var start = new Date (2017,10,11,22,30);
 DBinfo(["start time: ",start.toString()]);
 
 var crawl = {
